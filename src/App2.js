@@ -1,30 +1,35 @@
 import React from 'react';
 import { ApolloClient, HttpLink, InMemoryCache, ApolloProvider, gql } from 'apollo-boost'; 
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import logo from './logo.svg';
 import './App.css';
 
-const App = () => {
+const App2 = () => {
   
-  const cache = new InMemoryCache();
-  const link = new HttpLink({
-    uri: 'http://localhost:4000/graphql',
-  });
-  
-  const client = new ApolloClient({
-    link,
-    cache
-  })
-  
-  
-  client.query({
-    query: gql`
-    {
-  getAllUsers {
-    nombre
+  const QUERY = gql`
+    mutation nuevo($id: ID!,$n: String, $e: Int, $t: String){
+      addUser(id: $id, nombre: $n, edad:$e, telefono:$t){
+      nombre
   }
 }
-    `
-  }).then(result=> console.log(result))
+  `
+  const id=3030
+  const nombre="AZ"
+  const edad=30
+  const telefono="1919191"
+  const [test, {data}] = useMutation(QUERY, {variables:{
+    id,
+    nombre,
+    edad,
+    telefono
+  }}); 
+  
+  
+    
+    //const { loading, error, data } = useMutation(QUERY,{variables: {id,name,products}});
+    console.log(data);
+  
+  
   
   
   return (
@@ -42,9 +47,10 @@ const App = () => {
         >
           Learn React
         </a>
+        <button onClick={test}>test</button>
       </header>
     </div>
   );
 }
 
-export default App;
+export default App2;
